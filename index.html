@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mi carta para ti</title>
+  <!-- Fuentes -->
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b0b0d;
+      --ink:#e9e3db;
+      --red:#9a0f2f;
+      --red-2:#d21445;
+      --shadow:#0007;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background: radial-gradient(1200px 700px at 70% -10%, #1b0f15 0%, var(--bg) 55%), var(--bg);
+      color:var(--ink);
+      font-family:"Cormorant Garamond", serif;
+      padding:16px;
+    }
+
+    /* Corazones flotantes */
+    .hearts{position:fixed; inset:0; pointer-events:none; overflow:hidden;}
+    .heart{position:absolute; font-size:22px; opacity:.18; filter:drop-shadow(0 2px 6px var(--shadow));
+      animation: floatUp 12s linear infinite;
+    }
+    @keyframes floatUp{
+      0%{ transform:translateY(20vh) scale(.9) rotate(0deg); opacity:0 }
+      10%{opacity:.25}
+      100%{ transform:translateY(-110vh) scale(1.1) rotate(12deg); opacity:0 }
+    }
+
+    .wrap{width:min(900px,95vw); margin-inline:auto; text-align:center;}
+
+    /* Sobre */
+    .envelope{position:relative; width:100%; aspect-ratio: 3/2; max-height:60vh;
+      background: linear-gradient(180deg, #1a0c12 0%, #11070b 100%);
+      border:2px solid #250a12; border-radius:18px;
+      box-shadow:0 20px 60px var(--shadow), inset 0 0 0 1px #430919;
+      margin-bottom:40px;
+    }
+    .flap{position:absolute; inset:0 0 50% 0; background: linear-gradient(180deg,#250a12 0%,#13060a 100%);
+      clip-path: polygon(0 0,100% 0,50% 100%);
+      transform-origin:50% 0%; transition:transform .9s cubic-bezier(.2,.8,.15,1);
+      border-bottom:1px solid #430919;
+    }
+    .liner{position:absolute; inset:0; background:repeating-linear-gradient(135deg,#250a12 0 10px,#1b0c12 10px 20px); opacity:.35}
+
+    .seal{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+      width:100px; height:100px; border-radius:50%;
+      background: radial-gradient(70% 70% at 30% 30%, #ff7f9b 0%, #c71843 40%, #7d0f27 100%);
+      box-shadow:0 10px 20px var(--shadow), inset 0 6px 18px #ff9fb6;
+      display:grid; place-items:center; cursor:pointer;
+      border:3px solid #4d0b1a; transition:transform .2s ease;
+    }
+    .seal span{font-family:"UnifrakturMaguntia", serif; font-size:40px; color:#fff; text-shadow:0 2px 8px #000a}
+    .seal:active{transform:translate(-50%,-50%) scale(.95)}
+
+    .open .flap{transform:rotateX(180deg)}
+    .open .seal{display:none}
+
+    /* Carta */
+    .letter{
+      display:none;
+      background:#11070b; color:var(--ink);
+      border:1px solid #3a0e1b; border-radius:22px; padding:24px;
+      box-shadow:0 30px 70px var(--shadow), inset 0 0 0 1px #5b0f26;
+      margin-top:20px;
+    }
+    .letter.active{display:block; animation:fadeIn .8s ease;}
+    @keyframes fadeIn{from{opacity:0; transform:translateY(20px)} to{opacity:1; transform:translateY(0)}}
+
+    /* Tipografía */
+    .title{font-family:"UnifrakturMaguntia", serif; font-size:clamp(28px,6vw,48px); margin:0 0 6px; color:var(--red-2); text-align:center;}
+    .subtitle{text-align:center; opacity:.8; margin:0 0 18px; font-size:16px}
+    .body p{font-size:18px; line-height:1.55; margin:0 0 14px; text-align:justify;}
+    .sig{margin-top:18px; font-weight:600}
+
+    .actions{display:flex; justify-content:flex-end; margin-top:12px}
+    .btn{background:#18070d; color:var(--ink); border:1px solid #5b0f26; padding:8px 12px; border-radius:10px; cursor:pointer;
+      font-size:14px; box-shadow:0 6px 14px var(--shadow), inset 0 0 0 1px #7a0f2f;
+      text-decoration:none
+    }
+    .footer{text-align:center; margin-top:10px; font-size:13px; opacity:.6}
+    .heart-bullet{color:var(--red-2); margin:0 .15em}
+  </style>
+</head>
+<body>
+  <div class="hearts" aria-hidden="true">
+    <div class="heart" style="left:6%; animation-delay:0s">❤</div>
+    <div class="heart" style="left:18%; animation-delay:2s">❤</div>
+    <div class="heart" style="left:32%; animation-delay:4s">❤</div>
+    <div class="heart" style="left:48%; animation-delay:1s">❤</div>
+    <div class="heart" style="left:63%; animation-delay:3s">❤</div>
+    <div class="heart" style="left:79%; animation-delay:5s">❤</div>
+    <div class="heart" style="left:91%; animation-delay:1.6s">❤</div>
+  </div>
+
+  <main class="wrap">
+    <!-- SOBRE -->
+    <section class="envelope" id="envelope" aria-label="Carta para Lindsay">
+      <div class="liner" aria-hidden="true"></div>
+      <div class="flap" aria-hidden="true"></div>
+      <button class="seal" id="openBtn" aria-label="Abrir carta"><span>❤</span></button>
+    </section>
+
+    <!-- CARTA (aparece debajo del sobre) -->
+    <article class="letter" id="letter">
+      <header>
+        <h1 class="title">De Mi Para Ti, Siempre Te Amare Lindsay</h1>
+        <p class="subtitle">Maldonado — 26 de agosto de 2025</p>
+      </header>
+      <div class="body">
+        <p>Lindsay,</p>
+        <p>
+          Esta es la verdad: <strong>primer intento</strong>, Te falle yo; <strong>segundo</strong>, Te fuiste tú; <strong>tercero</strong>, cuando más nos amamos, más nos distanciaremos.
+          Y aun así, aquí sigo —y <em>aquí estoy</em>— con el corazón latiendo por ti, como siempre.
+        </p>
+        <p>
+          Me duele que te vayas este domingo, pero más fuerte que el dolor es la certeza de que mereces sanar y volver a brillar. Que tu familia te cuide no borra lo que somos; 
+          sólo pone una pausa para que vuelvas a encontrarte. Yo no lucho contra tu bienestar; lo abrazo. Si el internado es un refugio para tu ánimo y tu paz, entonces yo estaré 
+          desde acá, siendo viento a tu favor, esperando nuestro reencuentro.
+        </p>
+        <p>
+          Te amo, Lindsay. Y sé que me amás. Esa verdad no se mide en kilómetros ni en horarios; se mide en cómo me cambiaste la mirada del mundo. Si alguna noche te visita la tristeza, 
+          recordá esto: no estás sola. Tenés mi voz, aunque sea en silencio; mi risa, aunque tarde en llegar; mi abrazo, aunque hoy sea de tinta.
+        </p>
+        <p>
+          No quiero promesas pesadas ni cadenas. Quiero que estés bien. <span class="heart-bullet">♥</span> Quiero que descubras nuevas fuerzas. <span class="heart-bullet">♥</span> 
+          Quiero que vuelvas cuando quieras, como quieras, sabiendo que voy a recibirte con la misma sonrisa de siempre.
+        </p>
+        <p>
+          Si alguna vez dudás, mirá el cielo. Elegí una estrella y hacela nuestra señal secreta. Yo elegiré otra desde acá. Cuando ambas titilen, sabremos que, a pesar de todo, 
+          seguimos mirándonos.
+        </p>
+        <p class="sig">Con amor, siempre — Franco-Joaquín</p>
+      </div>
+      <div class="actions">
+        <a class="btn" href="#" id="closeLink">Cerrar</a>
+      </div>
+      <p class="footer">“El amor que cuida, espera. El amor que espera, no se apaga.”</p>
+    </article>
+  </main>
+
+  <script>
+    const envelope = document.getElementById('envelope');
+    const openBtn = document.getElementById('openBtn');
+    const closeLink = document.getElementById('closeLink');
+    const letter = document.getElementById('letter');
+
+    function openLetter(){
+      envelope.classList.add('open');
+      letter.classList.add('active');
+      letter.scrollIntoView({behavior:'smooth'});
+    }
+    function closeLetter(){
+      envelope.classList.remove('open');
+      letter.classList.remove('active');
+      openBtn.focus();
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+
+    openBtn.addEventListener('click', openLetter);
+    closeLink.addEventListener('click', e=>{e.preventDefault(); closeLetter();});
+  </script>
+</body>
+</html>
+
+
